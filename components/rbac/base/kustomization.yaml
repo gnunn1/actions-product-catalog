@@ -1,0 +1,3 @@
+resources:
+- actions-role-binding.yaml
+- actions-service-account.yaml
