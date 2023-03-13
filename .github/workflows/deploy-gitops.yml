@@ -29,8 +29,10 @@ jobs:
         echo "Checking application $ARGOCD_APPLICATION_NAME with server $ARGOCD_SERVER"
         # Sync application
         if [[ $(argocd --grpc-web app get $ARGOCD_APPLICATION_NAME -o json | jq '.spec.syncPolicy.automated') != "null" ]] ; then
+          echo "Refreshing application $ARGOCD_APPLICATION_NAME"
           argocd --grpc-web app get $ARGOCD_APPLICATION_NAME --refresh
         else
+          echo "Synchronizing application $ARGOCD_APPLICATION_NAME"
           argocd --grpc-web app sync $ARGOCD_APPLICATION_NAME
         fi
         # Application may already be syncing due to webhook
