@@ -38,7 +38,7 @@ jobs:
         fi
         # Application may already be syncing due to webhook
         echo "#### Waiting for automatic sync if it was already triggered (or other pending operation) ####"
-        argocd app --grpc-web wait "$ARGOCD_APPLICATION_NAME" --operation
+        argocd app --grpc-web wait "$ARGOCD_APPLICATION_NAME" --health
       env:
         ARGOCD_FLAGS: "--grpc-web"
         ARGOCD_AUTH_TOKEN: "${{ secrets.ARGOCD_AUTH_TOKEN }}"
