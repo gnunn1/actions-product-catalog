@@ -26,6 +26,8 @@ jobs:
 
     - name: Sync and Wait for Argo
       run: |
+        echo "Waiting 5 seconds"
+        sleep 5s
         echo "Checking application $ARGOCD_APPLICATION_NAME with server $ARGOCD_SERVER"
         # Sync application
         if [[ $(argocd --grpc-web app get $ARGOCD_APPLICATION_NAME -o json | jq '.spec.syncPolicy.automated') != "null" ]] ; then
@@ -38,7 +40,7 @@ jobs:
         fi
         # Application may already be syncing due to webhook
         echo "#### Waiting for automatic sync if it was already triggered (or other pending operation) ####"
-        argocd app --grpc-web wait "$ARGOCD_APPLICATION_NAME" --health
+        argocd app --grpc-web wait "$ARGOCD_APPLICATION_NAME" --sync
       env:
         ARGOCD_FLAGS: "--grpc-web"
         ARGOCD_AUTH_TOKEN: "${{ secrets.ARGOCD_AUTH_TOKEN }}"
