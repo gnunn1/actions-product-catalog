@@ -33,6 +33,7 @@ jobs:
           argocd --grpc-web app get $ARGOCD_APPLICATION_NAME --refresh
         else
           echo "Synchronizing application $ARGOCD_APPLICATION_NAME"
+          argocd --grpc-web app get $ARGOCD_APPLICATION_NAME --refresh
           argocd --grpc-web app sync $ARGOCD_APPLICATION_NAME
         fi
         # Application may already be syncing due to webhook
