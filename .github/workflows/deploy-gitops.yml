@@ -24,7 +24,7 @@ jobs:
         command: version
         options: --client
 
-    - name: Wait for Argo
+    - name: Sync and Wait for Argo
       run: |
         echo "Checking application $ARGOCD_APPLICATION_NAME with server $ARGOCD_SERVER"
         # Sync application
@@ -41,3 +41,8 @@ jobs:
         ARGOCD_AUTH_TOKEN: "${{ secrets.ARGOCD_AUTH_TOKEN }}"
         ARGOCD_SERVER: "argocd-server-gh-gitops.apps.home.ocplab.com"
         ARGOCD_APPLICATION_NAME: "gh-gitops/product-catalog"
+
+    - name: Integration Test
+      id: test
+      run: |
+        curl http://server-gh-product-catalog.apps.home.ocplab.com/api/version
