@@ -1,0 +1,43 @@
+name: GitOps
+
+on:
+  # https://docs.github.com/en/actions/reference/events-that-trigger-workflows
+  workflow_dispatch:
+  push:
+    # Edit to the branch(es) you want to build and deploy on each push.
+    branches: [ "main" ]
+
+jobs:
+
+  deploy:
+    name: Deploy Application
+    runs-on: ubuntu-20.04
+    environment: production
+
+    steps:
+    - uses: clowdhaus/argo-cd-action/@main
+      env:
+        # Only required for first step in job where API is called
+        # All subsequent setps in a job will not re-download the CLI
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        command: version
+        options: --client
+
+    - name: Wait for Argo
+      run: |
+        echo "Checking application $ARGOCD_APPLICATION_NAME with server $ARGOCD_SERVER"
+        # Sync application
+        if [[ $(argocd app get $ARGOCD_APPLICATION_NAME -o json | jq '.spec.syncPolicy.automated') != "null" ]] ; then
+          argocd app get $ARGOCD_APPLICATION_NAME --refresh
+        else
+          argocd app sync $ARGOCD_APPLICATION_NAME
+        fi
+        # Application may already be syncing due to webhook
+        echo "#### Waiting for automatic sync if it was already triggered (or other pending operation) ####"
+        argocd app wait "$ARGOCD_APPLICATION_NAME" --operation
+      env:
+        ARGOCD_FLAGS: "--grpc-web"
+        ARGOCD_AUTH_TOKEN: "${{ secrets.ARGOCD_AUTH_TOKEN }}"
+        ARGOCD_SERVER: "argocd-server-gh-gitops.apps.home.ocplab.com"
+        ARGOCD_APPLICATION_NAME: "gh-gitops/product-catalog"
