@@ -12,5 +12,5 @@ replicas:
 - count: 1
   name: client
 images:
-- digest: sha256:0481f382a3c5a212e8638c692674e6ab68c8eeea
+- digest: sha256:7823bd5f8ed97729854bd0a59a3e13c025135264
   name: server
