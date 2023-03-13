@@ -12,5 +12,5 @@ replicas:
 - count: 1
   name: client
 images:
-- digest: sha256:3a8c68067ced3b223e51939663352a2dccf04f4512f10f78a04aa67401edbcac
+- digest: sha256:20a0f4ec536bb4d5474720fdaab7ae74b4979c7d9628993b11471b45bc15c029
   name: quay.io/gnunn/server
