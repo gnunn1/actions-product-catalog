@@ -35,8 +35,8 @@ jobs:
           echo "Synchronizing application $ARGOCD_APPLICATION_NAME"
           argocd --grpc-web app sync $ARGOCD_APPLICATION_NAME
         fi
-        echo "Waiting 5 seconds just for things to shake out with Argo"
-        sleep 5s
+        echo "Waiting 1 seconds just for things to shake out with Argo"
+        sleep 1s
         # Application may still be syncing so wait here
         echo "#### Waiting for automatic sync if it was already triggered (or other pending operation) ####"
         argocd app --grpc-web wait "$ARGOCD_APPLICATION_NAME" --health
